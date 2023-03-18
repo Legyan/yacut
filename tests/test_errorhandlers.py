@@ -6,4 +6,4 @@ def test_404(client):
     assert (
         'If you entered the URL manually please check your spelling and try again.'
         not in got.data.decode('utf-8')
-    ), 'Добавьте обработку обращения к несуществующим страницам. Вам пригодится шаблон 404.html'
+    ), 'Добавьте обработку обращения к несуществующим страницам. Вам пригодится шаблон 404.static'
