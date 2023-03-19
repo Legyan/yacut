@@ -6,26 +6,42 @@
       <p class="text-center my-4">
         Создайте короткую ссылку автоматически или предложите свой вариант
       </p>
-
       <div class="container">
         <div class="row my-3">
           <div class="col-sm">
           </div>
           <div class="col-sm">
-            <form>
+            <form method="POST">
+              {{ form.csrf_token }}
               <div>
                 <div>
-                  <input type="text" class="form-control form-control-lg py-2 mb-3" id="form-title" name=""
-                    placeholder="Длинная ссылка">
-                  <p><span style="color:red">Текст возможной ошибки</span></p>
+                  {{ form.original_link(
+                    type="text",
+                    class="form-control form-control-lg py-2 mb-3",
+                    id="form-title", placeholder="Длинная ссылка"
+                    ) }}
+                  <p>
+                    {% if form.original_link.errors %}
+                      {% for error in form.original_links.errors %}
+                        <span style="color:red">{{ error }}</span>
+                      {% endfor %}
+                    {% endif %}
+                  </p>
                 </div>
                 <div>
-                  <input type="url" class="form-control form-control-lg py-2 mb-3" id="form-link" name=""
-                    placeholder="Ваш вариант короткой ссылки">
-                  <p><span style="color:red">Текст возможной ошибки</span></p>
+                  {{ form.custom_id(
+                    class="form-control form-control-lg py-2 mb-3",
+                    id="form-link", placeholder="Ваш вариант короткой ссылки"
+                    ) }}
+                  <p>
+                    {% if form.custom_id.errors %}
+                      {% for error in form.custom_id.errors %}
+                        <span style="color:red">{{ error }}</span>
+                      {% endfor %}
+                    {% endif %}
+                  </p>
                 </div>
-
-                <input type="submit" class="btn btn-primary" value="Создать">
+                {{ form.submit(class="btn btn-primary", value="Создать") }}
               </div>
             </form>
           </div>
@@ -33,21 +49,33 @@
           </div>
         </div>
       </div>
-
       <div class="container">
         <div class="row ">
           <div class="col-sm">
           </div>
           <div class="col-sm">
             <p class="text-center">
-            <h5 class="text-center">Пример информационного сообщения</h5>
+            <h5 class="text-center">
+            {% if url %}
+              Ваша новая ссылка готова:
+              <a href="{{ url_for('short_link_redirect', short=url.short, _external=True) }}">
+                {{ url_for('short_link_redirect', short=url.short, _external=True) }}
+              </a>
+            {% endif %}
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  {% for message in messages %}
+                    {{ message}}
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+            </h5>
             </p>
           </div>
           <div class="col-sm">
           </div>
         </div>
       </div>
-
     </section>
   </main>
-  {% endblock %}
+{% endblock %}
