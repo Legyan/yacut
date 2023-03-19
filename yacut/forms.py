@@ -4,13 +4,13 @@ from wtforms.validators import DataRequired, Length, Optional
 
 
 class LinksForm(FlaskForm):
-    original_links = URLField(
+    original_link = URLField(
         'Длинная ссылка',
         validators=[DataRequired(message='Обязательное поле'),
-                    Length(1, 128)]
+                    Length(1, 512)]
     )
     custom_id = StringField(
         'Ваш вариант короткой ссылки',
-        validators=[Length(1, 16), Optional()]
+        validators=[Length(0, 16), Optional()]
     )
     submit = SubmitField('Создать')

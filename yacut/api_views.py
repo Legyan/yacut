@@ -11,6 +11,7 @@ from .views import validate_custom_id, random_link
 
 @app.route('/api/id/', methods=['POST'])
 def create_short_link():
+    """Создание для длинной ссылки соответствующей короткой ссылки"""
     data = request.get_json()
     if not data:
         raise InvalidAPIUsage('Отсутствует тело запроса')
@@ -18,12 +19,13 @@ def create_short_link():
         raise InvalidAPIUsage('\"url\" является обязательным полем!')
     if 'custom_id' in data:
         custom_id = data.get('custom_id')
-        if not validate_custom_id(custom_id):
-            raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
-        if URLMap.query.filter_by(short=custom_id).first():
-            raise InvalidAPIUsage(f'Имя "{custom_id}" уже занято.')
         if not custom_id:
             data['custom_id'] = random_link()
+        elif not validate_custom_id(custom_id):
+            raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
+        elif URLMap.query.filter_by(short=custom_id).first():
+            raise InvalidAPIUsage(f'Имя "{custom_id}" уже занято.')
+
     else:
         data['custom_id'] = random_link()
     data['original'] = data['url']
@@ -39,6 +41,7 @@ def create_short_link():
 
 @app.route('/api/id/<string:short_id>/')
 def get_original_link(short_id):
+    """Получение оригинальной сслыки из соответствующей ей короткой ссылки"""
     if not short_id:
         raise InvalidAPIUsage('Поле "short_id" является оязательным')
     url = URLMap.query.filter_by(short=short_id).first()

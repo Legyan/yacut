@@ -12,7 +12,7 @@ class URLMap(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def from_dict(self, data):
-        for field in ['id', 'original', 'short', 'timestamp']:
+        for field in ['original', 'short']:
             if field in data:
                 setattr(self, field, data[field])
 
