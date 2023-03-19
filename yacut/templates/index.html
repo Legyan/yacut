@@ -15,13 +15,13 @@
               {{ form.csrf_token }}
               <div>
                 <div>
-                  {{ form.original_link(
+                  {{ form.original_links(
                     type="text",
                     class="form-control form-control-lg py-2 mb-3",
                     id="form-title", placeholder="Длинная ссылка"
                     ) }}
                   <p>
-                    {% if form.original_link.errors %}
+                    {% if form.original_links.errors %}
                       {% for error in form.original_links.errors %}
                         <span style="color:red">{{ error }}</span>
                       {% endfor %}

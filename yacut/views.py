@@ -1,5 +1,5 @@
 from random import choice
-from flask import flash, redirect, render_template, request
+from flask import flash, redirect, render_template
 
 from . import app, db
 from .constants import CHARACTERS, LINK_LENGHT
@@ -8,7 +8,10 @@ from .models import URLMap
 
 
 def random_link():
-    return ''.join(choice(CHARACTERS) for _ in range(LINK_LENGHT))
+    unique_link = ''.join(choice(CHARACTERS) for _ in range(LINK_LENGHT))
+    while URLMap.query.filter_by(short=unique_link).first():
+        unique_link = ''.join(choice(CHARACTERS) for _ in range(LINK_LENGHT))
+    return unique_link
 
 
 def validate_custom_id(custom_id):
@@ -31,24 +34,20 @@ def index_view():
                 flash(f'Cсылка {custom_id} уже занята')
                 return render_template('index.html', form=form)
             elif not validate_custom_id(custom_id):
-                flash('Предлагаемый вариант короткой ссылки должен состоять '
-                      'только из латинских букв и цифр. Количество символов '
-                      ' не должно превышать 16.')
+                flash('Указано недопустимое имя для короткой ссылки')
                 return render_template('index.html', form=form)
             else:
                 short = custom_id
         if not short:
             short = random_link()
-            while URLMap.query.filter_by(short=short).first():
-                short = random_link()
-        new_url = URLMap(original=form.original_link.data, short=short)
+        new_url = URLMap(original=form.original_links.data, short=short)
         db.session.add(new_url)
         db.session.commit()
         return render_template('index.html', form=form, url=new_url)
     return render_template('index.html', form=form)
 
 
-@app.route('/<string:short>', methods=['GET', 'POST'])
+@app.route('/<string:short>')
 def short_link_redirect(short):
     return redirect(
         URLMap.query.filter_by(short=short).first_or_404().original

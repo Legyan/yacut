@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from . import db
+from flask import url_for
+
+from yacut import db
 
 
 class URLMap(db.Model):
@@ -14,3 +16,8 @@ class URLMap(db.Model):
             if field in data:
                 setattr(self, field, data[field])
 
+    def to_dict(self):
+        return dict(
+            url=self.original,
+            short_link=url_for('index_view', _external=True) + self.short
+        )

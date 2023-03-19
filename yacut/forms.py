@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Length, Optional
 
 
 class LinksForm(FlaskForm):
-    original_link = URLField(
+    original_links = URLField(
         'Длинная ссылка',
         validators=[DataRequired(message='Обязательное поле'),
                     Length(1, 128)]
