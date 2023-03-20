@@ -18,6 +18,15 @@ class InvalidAPIUsage(Exception):
         return dict(message=self.message)
 
 
+class DatabaseError(Exception):
+    message = 'Ошибка базы данных'
+
+    def __init__(self, message=None):
+        super().__init__()
+        if message is not None:
+            self.message = message
+
+
 @app.errorhandler(InvalidAPIUsage)
 def invalid_api_usage(error):
     return jsonify(error.to_dict()), error.status_code

@@ -1,9 +1,10 @@
 from flask import flash, redirect, render_template
 
-from . import app, db
+from . import app
+from .error_handlers import DatabaseError
 from .forms import LinksForm
 from .models import URLMap
-from .utils import random_link, validate_custom_id
+from .utils import add_to_database, random_link, validate_custom_id
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -25,8 +26,11 @@ def index_view():
         if not short:
             short = random_link()
         new_url = URLMap(original=form.original_link.data, short=short)
-        db.session.add(new_url)
-        db.session.commit()
+        try:
+            add_to_database(new_url)
+        except DatabaseError as error:
+            flash(error.message)
+            return render_template('index.html', form=form)
         return render_template('index.html', form=form, url=new_url)
     return render_template('index.html', form=form)
 

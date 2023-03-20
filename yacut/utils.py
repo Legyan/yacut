@@ -1,6 +1,9 @@
 from random import choice
+from sqlalchemy.exc import SQLAlchemyError
 
+from . import app, db
 from .constants import CHARACTERS, LINK_LENGHT
+from .error_handlers import DatabaseError
 from .models import URLMap
 
 
@@ -20,3 +23,14 @@ def validate_custom_id(custom_id):
         if symbol not in CHARACTERS:
             return False
     return True
+
+
+def add_to_database(*args):
+    try:
+        with app.app_context():
+            for url in args:
+                db.session.add(url)
+            db.session.commit()
+    except SQLAlchemyError:
+        db.session.rollback()
+        raise DatabaseError('Ошибка при добавлении ссылки в базу данных')

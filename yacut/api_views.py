@@ -2,11 +2,11 @@ from http import HTTPStatus
 
 from flask import jsonify, request
 
-from . import app, db
-
-from .error_handlers import InvalidAPIUsage
+from . import app
+from .error_handlers import InvalidAPIUsage, DatabaseError
 from .models import URLMap
 from .views import validate_custom_id, random_link
+from .utils import add_to_database
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -34,8 +34,10 @@ def create_short_link():
     del data['custom_id']
     new_url = URLMap()
     new_url.from_dict(data)
-    db.session.add(new_url)
-    db.session.commit()
+    try:
+        add_to_database(new_url)
+    except DatabaseError as error:
+        raise InvalidAPIUsage(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
     return jsonify(new_url.to_dict()), HTTPStatus.CREATED
 
 
