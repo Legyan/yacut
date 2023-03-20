@@ -25,11 +25,11 @@ def validate_custom_id(custom_id):
     return True
 
 
-def add_to_database(*args):
+def add_url_to_database(url):
     try:
         with app.app_context():
-            for url in args:
-                db.session.add(url)
+            new_url = URLMap(original=url.original, short=url.short)
+            db.session.add(new_url)
             db.session.commit()
     except SQLAlchemyError:
         db.session.rollback()

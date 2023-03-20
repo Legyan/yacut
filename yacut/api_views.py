@@ -6,7 +6,7 @@ from . import app
 from .error_handlers import InvalidAPIUsage, DatabaseError
 from .models import URLMap
 from .views import validate_custom_id, random_link
-from .utils import add_to_database
+from .utils import add_url_to_database
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -35,7 +35,7 @@ def create_short_link():
     new_url = URLMap()
     new_url.from_dict(data)
     try:
-        add_to_database(new_url)
+        add_url_to_database(new_url)
     except DatabaseError as error:
         raise InvalidAPIUsage(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
     return jsonify(new_url.to_dict()), HTTPStatus.CREATED
