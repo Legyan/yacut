@@ -64,6 +64,10 @@ pip install -r requirements.txt
 Создать в корневой директории файл .env и заполнить его данными:
 
 ```
+touch .env && nano .env
+```
+
+```
 FLASK_APP=yacut
 FLASK_ENV=production
 DATABASE_URI=sqlite:///db.sqlite3
@@ -87,47 +91,60 @@ exit()
 ```
 flask run
 ```
+
 ### Примеры запросов к API:
 
 #### 1. Запрос: POST /api/id/
 
+```
 {
   "url": "https://www.google.com/search?q=flask+documentation&ei=SWAXZPD2KYWBi-gPp-SyYA&ved"
 }
+```
 
 #### Ответ: HTTP/1.1 201 Created
 
+```
 {
    "url": "https://www.google.com/search?q=flask+documentation&ei=SWAXZPD2KYWBi-gPp-SyYA&ved",
    "short_link": "http://localhost:8000/AaBbCc"
 }
+```
 
 #### 2. Запрос: POST /api/id/
 
+```
 {
   "url": "https://www.google.com/search?q=flask+tutorial&ei=aWAXZPz1G86QkwWJ8qv4BQ",
   "custom_id": "flasktutor"
 }
+```
 
 #### Ответ: HTTP/1.1 201 Created
 
+```
 {
    "url": "https://www.google.com/search?q=flask+tutorial&ei=aWAXZPz1G86QkwWJ8qv4BQ",
    "short_link": "http://localhost:8000/flasktutor"
 }
+```
 
 #### 3. Запрос: GET /api/id/flasktutor
 
 #### Ответ: HTTP/1.1 201 Created
 
+```
 {
    "url": "https://www.google.com/search?q=flask+tutorial&ei=aWAXZPz1G86QkwWJ8qv4BQ"
 }
+```
 
 #### 4. Запрос: GET /api/id/djangotutor
 
 #### Ответ: HTTP/1.1 404 Not Found
 
+```
 {
    "message": "Указанный id не найден"
 }
+```
