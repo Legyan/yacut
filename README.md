@@ -2,8 +2,6 @@
 
 Сервис укорачивания ссылок
 
-____
-
 ### Описание:
 
 Yacut ассоциирует длинную пользовательскую ссылку с короткой, которую предлагает сам пользователь или предоставляет сервис.
@@ -23,7 +21,7 @@ API дублирует функции веб сервиса, примеры за
 
 ### Запуск проекта
 
-Клонировать репозиторий и перейти в него в командной строке:
+1. Клонировать репозиторий и перейти в него в командной строке:
 
 ```
 git clone https://github.com/Legyan/yacut.git
@@ -33,7 +31,7 @@ git clone https://github.com/Legyan/yacut.git
 cd yacut
 ```
 
-Cоздать и активировать виртуальное окружение:
+2. Cоздать и активировать виртуальное окружение:
 
 ```
 python3 -m venv venv
@@ -51,7 +49,7 @@ python3 -m venv venv
     source venv/scripts/activate
     ```
 
-Установить зависимости из файла requirements.txt:
+3. Установить зависимости из файла requirements.txt:
 
 ```
 python3 -m pip install --upgrade pip
@@ -61,10 +59,10 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Создать в корневой директории файл .env и заполнить его данными:
+4. Создать в корневой директории файл .env и заполнить его данными:
 
 ```
-touch .env && nano .env
+nano .env
 ```
 
 ```
@@ -74,7 +72,7 @@ DATABASE_URI=sqlite:///db.sqlite3
 SECRET_KEY=<YOUR_SECRET_KEY>
 ```
 
-Создать базу данных SQLite:
+5. Создать базу данных SQLite:
 
 ```
 flask shell
@@ -86,13 +84,13 @@ db.create_all()
 exit()
 ```
 
-Запустить Flask приложение:
+6. Запустить Flask приложение:
 
 ```
 flask run
 ```
 
-### Примеры запросов к API:
+### Примеры запросов к API
 
 #### 1. Запрос: POST /api/id/
 
